@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Fees{% endblock %}
+{% block content %}
+  <div class="heading">
+    <div><h1>Fees &amp; Payments</h1><div class="muted">Track billing across all your matters.</div></div>
+    <a class="btn primary" href="{% url 'fee_create' %}">+ Add Fee Record</a>
+  </div>
+
+  <div class="cards" style="grid-template-columns:repeat(2,1fr); margin-bottom:20px;">
+    <div class="card"><div class="label">Total Billed</div><div class="value">₹{{ total_billed|floatformat:0 }}</div></div>
+    <div class="card"><div class="label">Pending Collection</div><div class="value">₹{{ total_pending|floatformat:0 }}</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="table-wrap">
+      <table id="dataTable">
+        <thead><tr><th>Case</th><th>Description</th><th>Amount</th><th>Status</th><th>Date</th><th></th></tr></thead>
+        <tbody>
+        {% for f in fees %}
+          <tr data-search="{{ f.case.case_number }} {{ f.description }}">
+            <td><span class="cell-strong">{{ f.case.case_number }}</span></td>
+            <td>{{ f.description|default:"—" }}</td>
+            <td>₹{{ f.amount|floatformat:0 }}</td>
+            <td>{% if f.paid %}<span class="badge green">Paid</span>{% else %}<span class="badge warn">Pending</span>{% endif %}</td>
+            <td class="muted">{{ f.created_at|date:"d M Y" }}</td>
+            <td>
+              <form method="post" action="{% url 'fee_toggle' f.id %}">
+                {% csrf_token %}
+                <button class="btn secondary sm" type="submit">{% if f.paid %}Mark Unpaid{% else %}Mark Paid{% endif %}</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr class="empty-row"><td colspan="6">No fee records yet — <a href="{% url 'fee_create' %}">add one</a>.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

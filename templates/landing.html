@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LegalDesk — Practice Management for Modern Chambers</title>
+  <meta name="description" content="LegalDesk is the practice management workspace built for advocates: cases, hearings, documents, tasks, billing and a secure client portal — all in one place.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <nav class="nav-public">
+    <div class="brand"><span class="mark">⚖</span>Legal<span>Desk</span></div>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#testimonials">Customers</a>
+    </div>
+    <div class="spacer"></div>
+    <div class="cta">
+      <a class="btn ghost sm" style="color:var(--ink-200);" href="{% url 'login' %}">Sign in</a>
+      <a class="btn accent sm" href="{% url 'signup' %}">Start Free Trial</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <span class="eyebrow">✦ Built for advocates &amp; law chambers</span>
+    <h1>Run your practice like a <em>modern firm</em>, not a filing cabinet.</h1>
+    <p class="lead">LegalDesk brings cases, hearings, documents, billing and client communication into one secure workspace — so nothing falls through the cracks, and clients only ever see what you choose to share.</p>
+    <div class="hero-cta">
+      <a class="btn accent" href="{% url 'signup' %}">Start Free Trial →</a>
+      <a class="btn secondary" style="background:rgba(255,255,255,0.08); color:var(--white); border-color:rgba(255,255,255,0.2);" href="#features">See how it works</a>
+    </div>
+    <div class="trust">Trusted by chambers and independent advocates across India</div>
+    <div class="trust-logos">
+      <span>Nair &amp; Associates</span>
+      <span>Chambers of R. Iyer</span>
+      <span>Desai Law Offices</span>
+      <span>Kapoor Legal</span>
+    </div>
+  </header>
+
+  <section class="section" id="features">
+    <div class="section-head">
+      <span class="kicker">Everything in one place</span>
+      <h2>One workspace, every part of the practice</h2>
+      <p>Replace scattered spreadsheets, WhatsApp threads and paper diaries with a single, secure system built around how advocates actually work.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon">⚖</div>
+        <h3>Case Management</h3>
+        <p>Track every matter with case numbers, courts, opposite parties and status — searchable in seconds, never misfiled.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">▣</div>
+        <h3>Hearing Calendar</h3>
+        <p>Never miss a date. See every upcoming hearing across all your cases on one dashboard, sorted by urgency.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🔒</div>
+        <h3>Private by Default</h3>
+        <p>Internal notes, strategy and private documents stay advocate-only. You decide exactly what a client is allowed to see.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">▤</div>
+        <h3>Document Vault</h3>
+        <p>Upload pleadings, orders and evidence against each case, and mark individual files as client-visible or private.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">✓</div>
+        <h3>Tasks &amp; Deadlines</h3>
+        <p>Assign follow-ups to yourself or your team, prioritise what matters, and track overdue items at a glance.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">₹</div>
+        <h3>Billing &amp; Fees</h3>
+        <p>Log fee records per case, track what's paid versus pending, and keep a clean financial trail for every client.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="workflow">
+    <div class="split">
+      <div class="split-copy">
+        <span class="kicker">For advocates</span>
+        <h2>Your private workspace, exactly the way a chamber should run.</h2>
+        <p>Every case lives on one page: hearings, internal notes, uploaded documents and linked tasks. Nothing is scattered across apps, and nothing leaves your control.</p>
+        <ul class="check-list">
+          <li><span class="tick">✓</span> Full-text search across cases, clients and documents</li>
+          <li><span class="tick">✓</span> Status tracking from filing to closure</li>
+          <li><span class="tick">✓</span> Internal notes visible only to your chamber</li>
+        </ul>
+        <a class="btn primary" href="{% url 'login' %}">Open Advocate Dashboard →</a>
+      </div>
+      <div class="split-visual">
+        <div class="mock-window">
+          <div class="mock-bar"><span></span><span></span><span></span></div>
+          <div class="mock-body">
+            <div class="cards" style="grid-template-columns:repeat(2,1fr); margin-bottom:14px;">
+              <div class="card" style="padding:14px;"><div class="label">Active Cases</div><div class="value" style="font-size:22px;">86</div></div>
+              <div class="card" style="padding:14px;"><div class="label">Pending Fees</div><div class="value" style="font-size:22px;">₹42K</div></div>
+            </div>
+            <div class="event"><div class="datebox"><b>15</b><small>SEP</small></div><div><strong>LD-2026-001</strong><p>District Court · Hearing</p></div></div>
+            <div class="event"><div class="datebox"><b>18</b><small>SEP</small></div><div><strong>LD-2026-002</strong><p>Family Court · Hearing</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="split reverse">
+      <div class="split-copy">
+        <span class="kicker">For clients</span>
+        <h2>A calm, curated portal — never a confusing case file.</h2>
+        <p>Clients log in to a simplified read-only portal showing only the hearings, documents and status updates you choose to share. Your strategy and internal notes never leave your workspace.</p>
+        <ul class="check-list">
+          <li><span class="tick">✓</span> Clients see status, not your working notes</li>
+          <li><span class="tick">✓</span> Share individual documents selectively</li>
+          <li><span class="tick">✓</span> Fewer "what's happening with my case?" calls</li>
+        </ul>
+        <a class="btn secondary" href="{% url 'login' %}">Preview Client Portal →</a>
+      </div>
+      <div class="split-visual">
+        <div class="mock-window">
+          <div class="mock-bar"><span></span><span></span><span></span></div>
+          <div class="mock-body">
+            <div class="privacy" style="background:var(--ink-50); border-color:var(--ink-100); color:var(--ink-600); margin-bottom:14px;">
+              🔒 <b style="color:var(--ink-900);">Curated view</b> — internal notes stay private.
+            </div>
+            <div class="doc-row"><div class="file-ic">📄</div><div><div class="doc-name">Vakalatnama.pdf</div><div class="doc-meta">Shared 2 days ago</div></div></div>
+            <div class="doc-row"><div class="file-ic">📄</div><div><div class="doc-name">Court Order — 15 Sep</div><div class="doc-meta">Shared today</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <div class="section-head">
+      <span class="kicker">Simple pricing</span>
+      <h2>Plans that scale with your chamber</h2>
+      <p>Start free. Upgrade when your practice — and your case list — grows.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Solo Advocate</h3>
+        <div class="price">₹0<span>/forever</span></div>
+        <div class="plan-desc">For individual practitioners just getting organised.</div>
+        <ul>
+          <li><span class="tick">✓</span> Up to 25 active cases</li>
+          <li><span class="tick">✓</span> Hearing calendar &amp; tasks</li>
+          <li><span class="tick">✓</span> Basic document vault</li>
+          <li><span class="tick">✓</span> Client portal (1 client seat)</li>
+        </ul>
+        <a class="btn secondary block" href="{% url 'signup' %}">Get Started</a>
+      </div>
+      <div class="price-card featured">
+        <span class="plan-tag">Most Popular</span>
+        <h3>Chamber</h3>
+        <div class="price">₹1,999<span>/month</span></div>
+        <div class="plan-desc">For growing chambers with a small team.</div>
+        <ul>
+          <li><span class="tick">✓</span> Unlimited cases &amp; clients</li>
+          <li><span class="tick">✓</span> Team task assignment</li>
+          <li><span class="tick">✓</span> Fee tracking &amp; reports</li>
+          <li><span class="tick">✓</span> Priority document storage</li>
+          <li><span class="tick">✓</span> Email support</li>
+        </ul>
+        <a class="btn primary block" href="{% url 'signup' %}">Start Free Trial</a>
+      </div>
+      <div class="price-card">
+        <h3>Firm</h3>
+        <div class="price">Custom</div>
+        <div class="plan-desc">For multi-advocate firms with compliance needs.</div>
+        <ul>
+          <li><span class="tick">✓</span> Everything in Chamber</li>
+          <li><span class="tick">✓</span> Role-based permissions</li>
+          <li><span class="tick">✓</span> Audit logs &amp; data retention controls</li>
+          <li><span class="tick">✓</span> Dedicated onboarding</li>
+        </ul>
+        <a class="btn secondary block" href="{% url 'login' %}">Talk to Us</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="testimonials">
+    <div class="section-head">
+      <span class="kicker">What advocates say</span>
+      <h2>Built with chambers, for chambers</h2>
+    </div>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"I finally have one place for hearing dates instead of three different diaries. My juniors use it every morning."</p>
+        <div class="who"><div class="avatar">PN</div><div><b>Priya Nair</b><span>Nair &amp; Associates</span></div></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Clients stopped calling every other day asking for updates — they just check the portal now."</p>
+        <div class="who"><div class="avatar">RI</div><div><b>R. Iyer</b><span>Chambers of R. Iyer</span></div></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"The private/client-visible split on documents is exactly what we needed. Nothing sensitive ever leaks by accident."</p>
+        <div class="who"><div class="avatar">AD</div><div><b>Anita Desai</b><span>Desai Law Offices</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-banner">
+    <h2>Bring order to your practice this week.</h2>
+    <p>Set up your workspace in minutes — no credit card required.</p>
+    <div class="hero-cta"><a class="btn accent" href="{% url 'signup' %}">Start Free Trial →</a></div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><span class="mark">⚖</span>Legal<span>Desk</span></div>
+        <p>Practice management for advocates and chambers — cases, hearings, documents, billing and a secure client portal in one workspace.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="{% url 'login' %}">Client Portal</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#testimonials">Customers</a></li>
+          <li><a href="{% url 'login' %}">Sign in</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 LegalDesk. All rights reserved.</span>
+      <span>Demo MVP — not production legal software.</span>
+    </div>
+  </footer>
+
+</body>
+</html>

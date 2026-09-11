@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}LegalDesk{% endblock %} — LegalDesk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+{% with url_name=request.resolver_match.url_name %}
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="mark">⚖</span>Legal<span>Desk</span></div>
+
+    <div class="menu-title">Workspace</div>
+    <nav class="nav">
+      <a href="{% url 'dashboard' %}" class="{% if url_name == 'dashboard' %}active{% endif %}"><span class="ic">▦</span> Dashboard</a>
+      <a href="{% url 'case_list' %}" class="{% if url_name == 'case_list' or url_name == 'case_detail' or url_name == 'case_create' %}active{% endif %}"><span class="ic">⚖</span> Cases</a>
+      <a href="{% url 'task_list' %}" class="{% if url_name == 'task_list' or url_name == 'task_create' %}active{% endif %}"><span class="ic">✓</span> Tasks &amp; Deadlines</a>
+      <a href="{% url 'fee_list' %}" class="{% if url_name == 'fee_list' or url_name == 'fee_create' %}active{% endif %}"><span class="ic">₹</span> Fees &amp; Payments</a>
+    </nav>
+
+    <div class="menu-title">Management</div>
+    <nav class="nav">
+      <a href="/admin/"><span class="ic">👥</span> Clients &amp; Team</a>
+      <a href="/admin/"><span class="ic">⚙</span> Admin Console</a>
+    </nav>
+
+    <div class="spacer"></div>
+
+    <div class="privacy"><b>🔒 Private workspace</b><br>Internal notes and private documents are never shown to clients.</div>
+
+    <div class="sidebar-user">
+      <div class="avatar">{{ request.user.get_full_name|default:request.user.username|slice:":2"|upper }}</div>
+      <div>
+        <div class="name">{{ request.user.get_full_name|default:request.user.username }}</div>
+        <div class="role">Advocate</div>
+      </div>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button class="logout-btn" title="Sign out" type="submit">⏻</button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      {% block topbar_search %}
+      <input id="liveSearch" class="search" placeholder="Search cases, clients, documents...">
+      {% endblock %}
+      <div class="spacer"></div>
+      <div class="profile">
+        <div class="avatar">{{ request.user.get_full_name|default:request.user.username|slice:":2"|upper }}</div>
+        <div><b>{{ request.user.get_full_name|default:request.user.username }}</b><br><span class="muted">Advocate</span></div>
+      </div>
+    </header>
+
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="alert {{ message.tags }}" data-autohide>{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <section class="content">
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+</div>
+{% endwith %}
+<script src="{% static 'js/app.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

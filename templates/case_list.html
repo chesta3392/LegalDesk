@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Cases{% endblock %}
+{% block content %}
+  <div class="heading">
+    <div><h1>Cases</h1><div class="muted">All matters you are currently handling.</div></div>
+    <a class="btn primary" href="{% url 'case_create' %}">+ Add New Case</a>
+  </div>
+
+  <div class="panel">
+    <form class="filters" method="get">
+      <input class="input" style="max-width:260px" type="text" name="q" value="{{ q }}" placeholder="Search case number, title or client">
+      <select class="select" name="status" onchange="this.form.submit()">
+        <option value="">All statuses</option>
+        {% for value, label in status_choices %}
+          <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn secondary sm" type="submit">Filter</button>
+      {% if q or status %}<a class="btn ghost sm" href="{% url 'case_list' %}">Clear</a>{% endif %}
+    </form>
+
+    <div class="table-wrap">
+      <table id="dataTable">
+        <thead><tr><th>Case</th><th>Client</th><th>Type</th><th>Court</th><th>Status</th><th>Filed</th></tr></thead>
+        <tbody>
+        {% for case in cases %}
+          <tr class="clickable" data-search="{{ case.case_number }} {{ case.title }} {{ case.client }}" onclick="window.location='{% url 'case_detail' case.id %}'">
+            <td><span class="cell-strong">{{ case.case_number }}</span><br><span class="muted">{{ case.title }}</span></td>
+            <td>{{ case.client }}</td>
+            <td>{{ case.case_type }}</td>
+            <td>{{ case.court }}</td>
+            <td><span class="badge {{ case.status_css }}">{{ case.get_status_display }}</span></td>
+            <td class="muted">{{ case.created_at|date:"d M Y" }}</td>
+          </tr>
+        {% empty %}
+          <tr class="empty-row"><td colspan="6">
+            {% if q or status %}No cases match your filters.{% else %}No cases yet — <a href="{% url 'case_create' %}">create your first case</a>.{% endif %}
+          </td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

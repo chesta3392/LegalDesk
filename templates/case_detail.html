@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}{{ case.case_number }}{% endblock %}
+{% block content %}
+  <div class="breadcrumb">
+    <a href="{% if client_view %}{% url 'client_portal' %}{% else %}{% url 'case_list' %}{% endif %}">
+      {% if client_view %}My Cases{% else %}Cases{% endif %}
+    </a> / {{ case.case_number }}
+  </div>
+  <div class="heading">
+    <div>
+      <h1>{{ case.title }}</h1>
+      <div class="muted">{{ case.case_number }} · {{ case.case_type }} · {{ case.court }}</div>
+    </div>
+    <span class="badge {{ case.status_css }}">{{ case.get_status_display }}</span>
+  </div>
+
+  <div class="detail-grid">
+    <div>
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-head"><h2>Case Overview</h2></div>
+        <div class="two-col">
+          <div class="kv-list">
+            <div class="row"><span class="k">Client</span><span class="v">{{ case.client }}</span></div>
+            <div class="row"><span class="k">Opposite Party</span><span class="v">{{ case.opposite_party|default:"—" }}</span></div>
+            <div class="row"><span class="k">Filed On</span><span class="v">{{ case.created_at|date:"d M Y" }}</span></div>
+          </div>
+          <div class="kv-list">
+            <div class="row"><span class="k">Court</span><span class="v">{{ case.court }}</span></div>
+            <div class="row"><span class="k">Case Type</span><span class="v">{{ case.case_type }}</span></div>
+            {% if not client_view %}<div class="row"><span class="k">Fees Pending</span><span class="v">₹{{ case.pending_fees|floatformat:0 }}</span></div>{% endif %}
+          </div>
+        </div>
+        {% if case.description %}
+          <div style="margin-top:18px; padding-top:18px; border-top:1px solid var(--ink-100);">
+            <div class="muted" style="margin-bottom:6px;">Description</div>
+            <p style="font-size:14px; color:var(--ink-800); line-height:1.6;">{{ case.description }}</p>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-head">
+          <h2>Hearings</h2>
+          {% if not client_view %}<a class="btn secondary sm" href="{% url 'hearing_create' case.id %}">+ Add Hearing</a>{% endif %}
+        </div>
+        {% for h in hearings %}
+          <div class="event">
+            <div class="datebox"><b>{{ h.hearing_date|date:"d" }}</b><small>{{ h.hearing_date|date:"M" }}</small></div>
+            <div>
+              <strong>{{ h.purpose|default:"Hearing" }}</strong>
+              {% if h.is_upcoming %}<span class="badge warn" style="margin-left:8px;">Upcoming</span>{% endif %}
+              {% if h.notes %}<p>{{ h.notes }}</p>{% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <p class="muted">No hearings recorded yet.</p>
+        {% endfor %}
+      </div>
+
+      {% if not client_view %}
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-head">
+          <h2>Internal Notes <span class="badge muted-badge">Private</span></h2>
+          <a class="btn secondary sm" href="{% url 'note_create' case.id %}">+ Add Note</a>
+        </div>
+        {% for n in notes %}
+          <div class="note-card">
+            <div class="meta"><span>{{ n.author.get_full_name|default:n.author.username }}</span><span>{{ n.created_at|date:"d M Y, h:i A" }}</span></div>
+            <p>{{ n.note }}</p>
+          </div>
+        {% empty %}
+          <p class="muted">No internal notes yet.</p>
+        {% endfor %}
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Case Tasks</h2><a class="btn secondary sm" href="{% url 'task_create' %}">+ Add Task</a></div>
+        {% for t in tasks %}
+          <div class="event">
+            <div class="datebox"><b>{% if t.due_date %}{{ t.due_date|date:"d" }}{% else %}—{% endif %}</b><small>{% if t.due_date %}{{ t.due_date|date:"M" }}{% else %}n/a{% endif %}</small></div>
+            <div><strong>{{ t.title }}</strong><p>{{ t.get_priority_display }} priority {% if t.completed %}· Done{% endif %}</p></div>
+          </div>
+        {% empty %}
+          <p class="muted">No tasks linked to this case.</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Documents</h2>
+          {% if not client_view %}<a class="btn secondary sm" href="{% url 'document_create' case.id %}">+ Upload</a>{% endif %}
+        </div>
+        {% for d in documents %}
+          <div class="doc-row">
+            <div class="file-ic">📄</div>
+            <div>
+              <div class="doc-name">{{ d.title }}</div>
+              <div class="doc-meta">{{ d.uploaded_at|date:"d M Y" }} {% if not client_view and d.client_visible %}· <span style="color:var(--green)">Shared with client</span>{% endif %}</div>
+            </div>
+            <div class="spacer"></div>
+            <a class="btn ghost sm" href="{{ d.file.url }}" target="_blank">View</a>
+          </div>
+        {% empty %}
+          <p class="muted">No documents uploaded yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

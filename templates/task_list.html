@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Tasks{% endblock %}
+{% block content %}
+  <div class="heading">
+    <div><h1>Tasks &amp; Deadlines</h1><div class="muted">{{ open_count }} open task{{ open_count|pluralize }} assigned to you.</div></div>
+    <a class="btn primary" href="{% url 'task_create' %}">+ Create Task</a>
+  </div>
+
+  <div class="panel">
+    <div class="table-wrap">
+      <table id="dataTable">
+        <thead><tr><th>Task</th><th>Case</th><th>Priority</th><th>Due</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+        {% for t in tasks %}
+          <tr data-search="{{ t.title }} {{ t.case.case_number }}">
+            <td><span class="cell-strong">{{ t.title }}</span></td>
+            <td>{% if t.case %}{{ t.case.case_number }}{% else %}<span class="muted">General</span>{% endif %}</td>
+            <td>
+              {% if t.priority == "HIGH" %}<span class="badge red">High</span>
+              {% elif t.priority == "MEDIUM" %}<span class="badge warn">Medium</span>
+              {% else %}<span class="badge blue">Low</span>{% endif %}
+            </td>
+            <td class="{% if t.due_date and t.due_date < today and not t.completed %}muted{% endif %}">
+              {% if t.due_date %}{{ t.due_date|date:"d M Y" }}{% if t.is_overdue %} <span class="badge red">Overdue</span>{% endif %}{% else %}—{% endif %}
+            </td>
+            <td>{% if t.completed %}<span class="badge green">Done</span>{% else %}<span class="badge muted-badge">Pending</span>{% endif %}</td>
+            <td>
+              <form method="post" action="{% url 'task_toggle' t.id %}">
+                {% csrf_token %}
+                <button class="btn secondary sm" type="submit">{% if t.completed %}Reopen{% else %}Mark Done{% endif %}</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr class="empty-row"><td colspan="6">No tasks yet — <a href="{% url 'task_create' %}">create your first task</a>.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

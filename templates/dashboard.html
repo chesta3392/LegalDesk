@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <div class="heading">
+    <div>
+      <h1>Good to see you, {{ request.user.first_name|default:request.user.username }}</h1>
+      <div class="muted">Here's what needs your attention today.</div>
+    </div>
+    <a class="btn primary" href="{% url 'case_create' %}">+ Add New Case</a>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="label">Active Cases</div>
+      <div class="value">{{ active_count }}</div>
+      <div class="flat">{{ case_count }} total on file</div>
+    </div>
+    <div class="card">
+      <div class="label">Today's Hearings</div>
+      <div class="value">{{ hearing_today_count }}</div>
+      <div class="flat">{{ upcoming|length }} coming up</div>
+    </div>
+    <div class="card">
+      <div class="label">Pending Tasks</div>
+      <div class="value">{{ task_count }}</div>
+      {% if task_overdue_count %}
+        <div class="down">{{ task_overdue_count }} overdue</div>
+      {% else %}
+        <div class="up">All on schedule</div>
+      {% endif %}
+    </div>
+    <div class="card">
+      <div class="label">Pending Fees</div>
+      <div class="value">₹{{ pending_fees|floatformat:0 }}</div>
+      <div class="flat">Across all active matters</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <div class="panel-head"><h2>Recent Cases</h2><a class="btn secondary sm" href="{% url 'case_list' %}">View All</a></div>
+      <div class="table-wrap">
+        <table id="dataTable">
+          <thead><tr><th>Case</th><th>Client</th><th>Type</th><th>Next Hearing</th><th>Status</th></tr></thead>
+          <tbody>
+          {% for case in cases %}
+            <tr class="clickable" data-search="{{ case.case_number }} {{ case.title }} {{ case.client }}" onclick="window.location='{% url 'case_detail' case.id %}'">
+              <td><span class="cell-strong">{{ case.case_number }}</span><br><span class="muted">{{ case.court }}</span></td>
+              <td>{{ case.client }}</td>
+              <td>{{ case.case_type }}</td>
+              <td>{% if case.next_hearing %}{{ case.next_hearing.hearing_date|date:"d M Y" }}{% else %}<span class="muted">—</span>{% endif %}</td>
+              <td><span class="badge {{ case.status_css }}">{{ case.get_status_display }}</span></td>
+            </tr>
+          {% empty %}
+            <tr class="empty-row"><td colspan="5">No cases yet — <a href="{% url 'case_create' %}">create your first case</a>.</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>Upcoming Hearings</h2></div>
+      {% for h in upcoming %}
+        <div class="event">
+          <div class="datebox"><b>{{ h.hearing_date|date:"d" }}</b><small>{{ h.hearing_date|date:"M" }}</small></div>
+          <div><strong>{{ h.case.case_number }}</strong><p>{{ h.case.client }} · {{ h.case.court }}</p></div>
+        </div>
+      {% empty %}
+        <p class="muted">No upcoming hearings scheduled.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <div class="panel-head"><h2>Quick Actions</h2></div>
+      <div class="quick">
+        <a href="{% url 'case_create' %}"><b>⚖ New Case</b><span>Open a new client matter</span></a>
+        <a href="{% url 'task_create' %}"><b>✓ Create Task</b><span>Set a deadline and assignee</span></a>
+        <a href="{% url 'fee_create' %}"><b>₹ Add Fee Record</b><span>Log billing for a case</span></a>
+        <a href="/admin/dashboard/clientprofile/add/"><b>👤 Add Client</b><span>Create a secure client profile</span></a>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>My Pending Tasks</h2><a class="btn secondary sm" href="{% url 'task_list' %}">View All</a></div>
+      {% for t in recent_tasks %}
+        <div class="event">
+          <div class="datebox"><b>{% if t.due_date %}{{ t.due_date|date:"d" }}{% else %}—{% endif %}</b><small>{% if t.due_date %}{{ t.due_date|date:"M" }}{% else %}n/a{% endif %}</small></div>
+          <div><strong>{{ t.title }}</strong><p>{% if t.case %}{{ t.case.case_number }}{% else %}General{% endif %} · {{ t.get_priority_display }} priority</p></div>
+        </div>
+      {% empty %}
+        <p class="muted">You're all caught up — no open tasks.</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

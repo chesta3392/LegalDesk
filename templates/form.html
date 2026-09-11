@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+  <div class="breadcrumb">
+    {% if back_url %}
+      <a href="{% if back_arg %}{% url back_url back_arg %}{% else %}{% url back_url %}{% endif %}">← Back</a>
+    {% endif %}
+  </div>
+  <div class="heading"><div><h1>{{ title }}</h1></div></div>
+
+  <div class="form-card">
+    <form method="post" {% if is_file_form %}enctype="multipart/form-data"{% endif %} novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+        {% if field.field.widget.input_type == "checkbox" %}
+          <div class="field">
+            <div class="checkbox-row">
+              {{ field }}
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            </div>
+            {% if field.help_text %}<div class="hint">{{ field.help_text }}</div>{% endif %}
+            {% if field.errors %}<div class="errors">{{ field.errors|striptags }}</div>{% endif %}
+          </div>
+        {% else %}
+          <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+            {{ field }}
+            {% if field.help_text %}<div class="hint">{{ field.help_text }}</div>{% endif %}
+            {% if field.errors %}<div class="errors">{{ field.errors|striptags }}</div>{% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <div class="form-actions">
+        <button class="btn primary" type="submit">Save</button>
+        {% if back_url %}
+          <a class="btn secondary" href="{% if back_arg %}{% url back_url back_arg %}{% else %}{% url back_url %}{% endif %}">Cancel</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+{% endblock %}

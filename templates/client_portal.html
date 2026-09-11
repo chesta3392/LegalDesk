@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Cases — LegalDesk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<header class="nav-public" style="position:static;">
+  <div class="brand"><span class="mark">⚖</span>Legal<span>Desk</span></div>
+  <div class="spacer"></div>
+  <div class="profile" style="color:var(--white);">
+    <div class="avatar">{{ request.user.get_full_name|default:request.user.username|slice:":2"|upper }}</div>
+    <div><b style="color:var(--white);">{{ request.user.get_full_name|default:request.user.username }}</b><br><span class="muted" style="color:var(--ink-300);">Client</span></div>
+  </div>
+  <form method="post" action="{% url 'logout' %}" style="margin-left:16px;">
+    {% csrf_token %}
+    <button class="btn secondary sm" type="submit">Sign out</button>
+  </form>
+</header>
+
+{% if messages %}
+<div class="messages" style="padding-top:16px;">
+  {% for message in messages %}<div class="alert {{ message.tags }}" data-autohide>{{ message }}</div>{% endfor %}
+</div>
+{% endif %}
+
+<section class="content" style="max-width:1000px;">
+  <div class="heading">
+    <div>
+      <h1>Your Cases</h1>
+      <div class="muted">A read-only view of what your advocate has chosen to share with you.</div>
+    </div>
+  </div>
+
+  <div class="privacy" style="background:var(--white); border:1px solid var(--ink-100); color:var(--ink-600); margin-bottom:20px;">
+    🔒 <b style="color:var(--ink-900);">What you see here is curated.</b> Internal notes, private documents and strategy discussions stay with your advocate unless they choose to share them.
+  </div>
+
+  <div class="panel">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Case</th><th>Advocate</th><th>Type</th><th>Court</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for case in cases %}
+          <tr class="clickable" onclick="window.location='{% url 'case_detail' case.id %}'">
+            <td><span class="cell-strong">{{ case.case_number }}</span><br><span class="muted">{{ case.title }}</span></td>
+            <td>{{ case.advocate.get_full_name|default:case.advocate.username }}</td>
+            <td>{{ case.case_type }}</td>
+            <td>{{ case.court }}</td>
+            <td><span class="badge {{ case.status_css }}">{{ case.get_status_display }}</span></td>
+          </tr>
+        {% empty %}
+          <tr class="empty-row"><td colspan="5">No cases have been shared with you yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>
